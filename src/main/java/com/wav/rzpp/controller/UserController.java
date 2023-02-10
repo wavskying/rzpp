@@ -46,6 +46,7 @@ public class UserController {
     @PostMapping("/login")
     public AjaxResult login(RzUser rzUser) throws ValidatorException {
         System.out.println("111");
+        System.out.println("111");
         ValidatorUtil.checkLogin(rzUser.getUsername(), rzUser.getPassword());
         RzUser result = rzUserService.isLogin(rzUser.getUsername(), rzUser.getPassword());
         if (result != null) {
