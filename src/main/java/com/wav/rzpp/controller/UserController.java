@@ -70,7 +70,7 @@ public class UserController {
     @PostMapping("/register")
     public AjaxResult register(@Validated(Add.class) RzUser rzUser) {
         if (rzUserService.isExist(rzUser)) {
-            return AjaxResult.failed("注册信息已存在");
+            return AjaxResult.failed("账号已存在");
         }
         if (rzUserService.register(rzUser) != 0)
             return AjaxResult.success("注册成功");

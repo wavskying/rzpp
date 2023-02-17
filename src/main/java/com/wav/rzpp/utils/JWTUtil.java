@@ -76,7 +76,7 @@ public class JWTUtil {
         info.put("username", rzUser.getUsername());
         info.put("roleId", rzRole.getRoleId());
         info.put("roleName", rzRole.getRoleName());
-        return info.toJSONString();
+        return encode(info.toJSONString());
     }
 
     public static void main(String[] args) {
