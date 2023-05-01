@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wav.rzpp.mapper.RzSkillMapper">
+    <resultMap id="RzSkillResultMap" type="com.wav.rzpp.entity.RzSkill">
+        <id column="skill_id" property="skillId"/>
+        <result column="name" property="name"/>
+        <result column="type_name" property="typeName"/>
+        <result column="create_time" property="createTime"/>
+    </resultMap>
+
+    <select id="getSkillById" resultMap="RzSkillResultMap">
+        SELECT *
+        FROM rz_skill
+        WHERE skill_id = #{skillId}
+    </select>
+
+    <select id="getAllSkills" resultMap="RzSkillResultMap">
+        SELECT skill_id, name, type_name, create_time
+        FROM rz_skill
+    </select>
+
+    <insert id="addSkill" parameterType="com.wav.rzpp.entity.RzSkill">
+        INSERT INTO rz_skill(name, type_name, create_time)
+        VALUES (#{name}, #{typeName}, #{createTime})
+    </insert>
+
+    <update id="updateSkill" parameterType="com.wav.rzpp.entity.RzSkill">
+        UPDATE rz_skill
+        SET name=#{name},
+            type_name=#{typeName},
+            create_time=#{createTime}
+        WHERE skill_id = #{skillId}
+    </update>
+
+    <delete id="deleteSkill" parameterType="Long">
+        DELETE
+        FROM rz_skill
+        WHERE skill_id = #{skillId}
+    </delete>
+
+    <insert id="addSkills" parameterType="java.util.List">
+        INSERT INTO rz_skill (name, type_name, create_time)
+        VALUES
+        <foreach collection="rzSkills" item="rzSkill" separator=",">
+            (#{rzSkill.name}, #{rzSkill.typeName}, #{rzSkill.createTime})
+        </foreach>
+    </insert>
+
+    <select id="getSkillListByTalentId" resultType="map">
+        SELECT a.talent_id as talentId, a.skill_id as skillId, a.ability as ability, b.name as name
+        FROM rz_talent_skill a,
+             rz_skill b
+        WHERE a.talent_id = #{talentId}
+          and a.skill_id = b.skill_id
+        limit 5
+    </select>
+
+    <select id="getAllTalentSkill" resultType="com.wav.rzpp.entity.RzTalentSkill">
+        select a.talent_id, a.skill_id, a.ability, b.name as skill_name
+        from rz_talent_skill a,
+             rz_skill b
+        where a.skill_id = b.skill_id
+    </select>
+</mapper>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wav.rzpp.mapper.RzSessionMapper">
+    <select id="getSessionListBySenderId" resultType="map">
+        select a.name,
+               a.image,
+               session_id,
+               sender_id,
+               receive_id,
+               last_message,
+               un_read,
+               b.create_time
+        from rz_user a,
+             rz_session b
+        where a.user_id = b.receive_id
+          and b.sender_id = #{senderId}
+        order by b.create_time DESC
+    </select>
+
+    <insert id="addSession">
+        INSERT INTO rz_session(session_id, sender_id, receive_id, last_message, un_read, create_time)
+        VALUES (#{rzSession.sessionId}, -- 会话ID
+                #{rzSession.senderId}, -- 发送者ID
+                #{rzSession.receiveId}, -- 接收者ID
+                #{rzSession.lastMessage},-- 最后一条消息
+                #{rzSession.unRead}, -- 未读消息数
+                #{rzSession.createTime} -- 创建时间
+               )
+    </insert>
+
+
+    <select id="getSessionListBySenderIdAndReceiveId" resultType="com.wav.rzpp.entity.RzSession">
+        select *
+        from rz_session
+        where sender_id = #{senderId}
+          and receive_id = #{receiveId}
+    </select>
+</mapper>

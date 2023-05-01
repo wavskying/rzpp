@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wav.rzpp.mapper.RzMessageMapper">
+    <select id="getHistoryMessage" resultType="map">
+        select a.name, a.image, b.sender_id, b.receive_id, b.create_time, b.content
+        from rz_user a
+                 left join rz_message b on a.user_id = b.sender_id
+        where (b.sender_id = #{senderId} and b.receive_id = #{receiveId})
+           or (b.sender_id = #{receiveId} and b.receive_id = #{senderId})
+        order by b.create_time ASC
+    </select>
+
+    <select id="getLastMessage" resultType="java.lang.String">
+        select content
+        from rz_message
+        where (sender_id = #{senderId} and receive_id = #{receiveId})
+           or (sender_id = #{receiveId} and receive_id = #{senderId})
+        order by create_time DESC
+        limit 1
+    </select>
+
+    <insert id="addMessage">
+        insert into rz_message(message_id, sender_id, receive_id, content, create_time)
+        values (#{rzMessage.messageId}, #{rzMessage.senderId}, #{rzMessage.receiveId}, #{rzMessage.content},
+                #{rzMessage.createTime})
+    </insert>
+
+    <select id="getAllMessage" resultType="com.wav.rzpp.entity.RzMessage">
+        select message_id, sender_id, receive_id, content, create_time
+        from rz_message
+    </select>
+</mapper>

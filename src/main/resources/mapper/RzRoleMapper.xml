@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wav.rzpp.mapper.RzRoleMapper">
+    <select id="getRzRoleByRoleAnd" resultType="com.wav.rzpp.entity.RzRole">
+        select role_id, role_name, create_time
+        from rz_role
+        <where>
+            <if test="rzRole.roleId != null">
+                and role_id = #{rzRole.roleId}
+            </if>
+            <if test="rzRole.roleName != null">
+                and role_name = #{rzRole.roleName}
+            </if>
+        </where>
+    </select>
+
+    <select id="getRzRoleListByRoleAnd" resultType="com.wav.rzpp.entity.RzRole">
+        select role_id, role_name, create_time
+        from rz_role
+        <where>
+            <if test="rzRole.roleId != null">
+                and role_id = #{rzRole.roleId}
+            </if>
+            <if test="rzRole.roleName != null">
+                and role_name = #{rzRole.roleName}
+            </if>
+        </where>
+    </select>
+</mapper>

@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wav.rzpp.mapper.RzTalentMapper">
+    <insert id="addTalent">
+        insert into rz_talent(talent_id, name, sex, age, information, skill_id, image, position_name, position_id,
+                              user_id,
+                              create_time, cost, state)
+        values (#{rzTalent.talentId}, #{rzTalent.name}, #{rzTalent.sex}, #{rzTalent.age},
+                '本人具有扎实的计算机基础，掌握了多种编程语言及开发框架，能够熟练使用常用的Office软件。同时，本人为人乐于助人，具有较强的团队协作能力，积极参与各项活动，曾获得过多次奖学金和荣誉称号。对于新的技术和知识，本人也持续保持着学习和探索的态度，希望有机会能够为贵公司贡献自己的技术和能力。',
+                #{rzTalent.skillId}, #{rzTalent.image}, #{rzTalent.positionName}, #{rzTalent.positionId},
+                #{rzTalent.userId},
+                #{rzTalent.createTime}, #{rzTalent.cost}, #{param1.state})
+    </insert>
+
+    <!-- 分页查询所有人才信息 -->
+    <select id="getAllRzTalentsByPage" parameterType="map" resultType="com.wav.rzpp.entity.RzTalent">
+        select talent_id,
+        name,
+        sex,
+        age,
+        information,
+        skill_id,
+        position_id,
+        position_name,
+        image,
+        user_id,
+        create_time,
+        cost
+        from rz_talent
+        <where>
+            <if test="query != null">
+                AND (
+                name LIKE CONCAT('%', #{query}, '%')
+                OR information LIKE CONCAT('%', #{query}, '%')
+                OR position_name LIKE CONCAT('%', #{query}, '%')
+                )
+            </if>
+            <if test="positionId != null">
+                AND position_id = #{positionId}
+            </if>
+            and state = '未被录用'
+        </where>
+        limit #{start}, #{size}
+    </select>
+    <!-- 查询所有人才的总数 -->
+    <select id="getRzTalentsCount" resultType="int">
+        select count(*)
+        from rz_talent
+        <where>
+            <if test="query != null">
+                AND (
+                name LIKE CONCAT('%', #{query}, '%')
+                OR information LIKE CONCAT('%', #{query}, '%')
+                OR position_name LIKE CONCAT('%', #{query}, '%')
+                )
+            </if>
+            <if test="positionId != null">
+                AND position_id = #{positionId}
+            </if>
+        </where>
+    </select>
+    <!-- 根据 talentId 更新人才信息 -->
+    <update id="updateRzTalent" parameterType="com.wav.rzpp.entity.RzTalent">
+        update rz_talent
+        set name = #{name},
+        sex = #{sex},
+        age = #{age},
+        <!--            skill_id      = #{skillId},-->
+        position_id = #{positionId},
+        image = #{image},
+        create_time = #{createTime},
+        state = #{state}
+        <!--            cost          = #{cost}-->
+        where talent_id = #{talentId}
+    </update>
+    <!-- 根据 talentId 删除人才 -->
+    <delete id="deleteRzTalent" parameterType="Long">
+        delete
+        from rz_talent
+        where talent_id = #{talentId}
+    </delete>
+    <!-- 根据 talentId 查询人才信息 -->
+    <select id="getRzTalentById" parameterType="Long" resultType="com.wav.rzpp.entity.RzTalent">
+        select talent_id,
+               name,
+               sex,
+               age,
+               information,
+               skill_id,
+               position_id,
+               position_name,
+               image,
+               user_id,
+               create_time,
+               cost,
+               state
+        from rz_talent
+        where talent_id = #{talentId}
+    </select>
+    <!-- 查询所有人才信息 -->
+    <select id="getAllRzTalents" resultType="com.wav.rzpp.entity.RzTalent">
+        select talent_id,
+               a.name,
+               a.sex,
+               a.age,
+               a.information,
+               a.skill_id,
+               a.position_id,
+               b.name as position_name,
+               a.image,
+               a.user_id,
+               a.create_time,
+               a.cost,
+               a.state
+        from rz_talent a,
+             rz_position b
+        where a.position_id = b.position_id
+    </select>
+
+    <insert id="addBatch">
+        insert into rz_talent(talent_id, name, sex, age, information, skill_id, image, position_name,
+        position_id,user_id,
+        create_time,cost,state)
+        values
+        <foreach collection="rzTalents" item="rzTalent" separator=",">
+            (#{rzTalent.talentId}, #{rzTalent.name}, #{rzTalent.sex}, #{rzTalent.age}, #{rzTalent.information},
+            #{rzTalent.skillId}, #{rzTalent.image}, #{rzTalent.positionName}, #{rzTalent.positionId},#{rzTalent.userId},
+            #{rzTalent.createTime},#{rzTalent.cost},#{rzTalent.state})
+        </foreach>
+    </insert>
+
+    <!-- 查询人才的基本信息和技能集合 -->
+    <select id="getRzTalentInformation" resultType="com.wav.rzpp.entity.RzTalent">
+        select talent_id,
+               name,
+               sex,
+               age,
+               information,
+               skill_id,
+               position_id,
+               position_name,
+               image,
+               user_id,
+               create_time,
+               cost,
+               state
+        from rz_talent
+        where talent_id = #{talentId}
+          and state = '未被录用'
+    </select>
+
+    <select id="getTalentSort" resultType="java.util.Map">
+        SELECT t.talent_id,
+               t.NAME,
+               t.position_name,
+               t.cost,
+               t.user_id,
+               t.image,
+               COUNT(DISTINCT c.comment_id) AS comment_sum,
+               COUNT(DISTINCT o.order_id)   AS order_sum
+        FROM rz_talent t
+                 LEFT JOIN rz_comment c ON t.talent_id = c.talent_id
+                 LEFT JOIN `rz_order` o ON t.talent_id = o.talent_id
+        GROUP BY t.talent_id,
+                 t.NAME
+        ORDER BY order_sum DESC
+        LIMIT 5;
+    </select>
+</mapper>

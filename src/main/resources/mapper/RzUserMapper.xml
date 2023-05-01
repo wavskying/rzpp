@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wav.rzpp.mapper.RzUserMapper">
+    <select id="getRzUserByUserAnd" resultType="com.wav.rzpp.entity.RzUser">
+        select user_id, username, password, name, email, image, enterprise_id, role_id, create_time
+        from rz_user
+        <where>
+            <if test="rzUser.userId != null">
+                and user_id = #{rzUser.userId}
+            </if>
+            <if test="rzUser.username != null">
+                and username = #{rzUser.username}
+            </if>
+            <if test="rzUser.password != null">
+                and password = #{rzUser.password}
+            </if>
+            <if test="rzUser.email != null">
+                and email = #{rzUser.email}
+            </if>
+            <if test="rzUser.enterpriseId != null">
+                and enterprise_id = #{rzUser.enterpriseId}
+            </if>
+            <if test="rzUser.roleId != null">
+                and role_id = #{rzUser.roleId}
+            </if>
+        </where>
+    </select>
+
+    <select id="getRzUserListByUserAnd" resultType="com.wav.rzpp.entity.RzUser">
+        select user_id, username, password, name, email, image, enterprise_id, role_id, create_time
+        from rz_user
+        <where>
+            <if test="rzUser.userId != null">
+                and user_id = #{rzUser.userId}
+            </if>
+            <if test="rzUser.username != null">
+                and username = #{rzUser.username}
+            </if>
+            <if test="rzUser.password != null">
+                and password = #{rzUser.password}
+            </if>
+            <if test="rzUser.email != null">
+                and email = #{rzUser.email}
+            </if>
+            <if test="rzUser.enterpriseId != null">
+                and enterprise_id = #{rzUser.enterpriseId}
+            </if>
+            <if test="rzUser.roleId != null">
+                and role_id = #{rzUser.roleId}
+            </if>
+        </where>
+    </select>
+
+    <select id="getRzUserByUserOr" resultType="com.wav.rzpp.entity.RzUser">
+        select user_id, username, password, email, create_time,role_id, enterprise_id
+        from rz_user
+        <where>
+            <if test="rzUser.userId != null">
+                or user_id = #{rzUser.userId}
+            </if>
+            <if test="rzUser.username != null">
+                or username = #{rzUser.username}
+            </if>
+            <if test="rzUser.password != null">
+                or password = #{rzUser.password}
+            </if>
+            <if test="rzUser.email != null">
+                or email = #{rzUser.email}
+            </if>
+        </where>
+    </select>
+
+    <insert id="addRzUser">
+        INSERT INTO rz_user (user_id, username, password, name, email, image, enterprise_id, role_id, create_time)
+        VALUES (#{rzUser.userId},
+                #{rzUser.username},
+                #{rzUser.password},
+                #{rzUser.name},
+                #{rzUser.email},
+                #{rzUser.image},
+                #{rzUser.enterpriseId},
+                #{rzUser.roleId},
+                #{rzUser.createTime})
+    </insert>
+
+    <select id="getAllUser" resultType="com.wav.rzpp.entity.RzUser">
+        select user_id,
+               username,
+               password,
+               name,
+               email,
+               image,
+               enterprise_id,
+               role_id,
+               create_time
+        from rz_user
+    </select>
+
+    <update id="updateUser">
+        update rz_user
+        set name    = #{rzUser.name},
+            image   = #{rzUser.image},
+            role_id = #{rzUser.roleId},
+            email   = #{rzUser.email}
+        where user_id = #{rzUser.userId}
+    </update>
+
+    <delete id="deleteUser">
+        delete
+        from rz_user
+        where user_id = #{userId}
+    </delete>
+
+    <select id="getUserById" resultType="com.wav.rzpp.entity.RzUser">
+        select user_id,
+               username,
+               password,
+               name,
+               email,
+               image,
+               enterprise_id,
+               role_id,
+               create_time
+        from rz_user
+        where user_id = #{userId}
+    </select>
+
+    <select id="searchUser" resultType="com.wav.rzpp.entity.RzUser">
+        select user_id,
+               username,
+               password,
+               name,
+               email,
+               image,
+               enterprise_id,
+               role_id,
+               create_time
+        from rz_user
+        where user_id = #{text}
+           or username like CONCAT('%', #{text}, '%')
+           or name like CONCAT('%', #{text}, '%')
+    </select>
+</mapper>

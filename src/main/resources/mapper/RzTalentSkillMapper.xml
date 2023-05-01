@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wav.rzpp.mapper.RzTalentSkillMapper">
+    <insert id="addRzTalentSkill" parameterType="com.wav.rzpp.entity.RzTalentSkill" useGeneratedKeys="true"
+            keyProperty="talentId,skillId">
+        INSERT INTO rz_talent_skill(talent_id, skill_id, ability)
+        VALUES (#{talentId}, #{skillId}, #{ability})
+    </insert>
+
+    <insert id="addRzTalentSkillList" parameterType="java.util.List">
+        INSERT INTO rz_talent_skill(talent_id, skill_id, ability) VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.talentId}, #{item.skillId}, #{item.ability})
+        </foreach>
+    </insert>
+
+    <update id="updateTalentSkill">
+        update rz_talent_skill
+        set ability = #{ability}
+        where talent_id = #{talentId}
+          and skill_id = #{skillId}
+    </update>
+</mapper>

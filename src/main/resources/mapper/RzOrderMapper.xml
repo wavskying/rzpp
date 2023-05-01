@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wav.rzpp.mapper.RzOrderMapper">
+    <insert id="addOrder">
+        insert into rz_order (order_id, employer_id, talent_id, hire_time, hire_money, payment_state, order_state,
+                              create_time, user_id, manage_user_id, talent_name)
+        values (#{rzOrder.orderId}, #{rzOrder.employerId}, #{rzOrder.talentId}, #{rzOrder.hireTime},
+                #{rzOrder.hireMoney}, #{rzOrder.paymentState}, #{rzOrder.orderState}, #{rzOrder.createTime},
+                #{rzOrder.userId}, #{rzOrder.manageUserId}, #{rzOrder.talentName})
+    </insert>
+
+
+    <select id="getOrderListByUserId" resultType="com.wav.rzpp.entity.RzOrder">
+        select order_id,
+               employer_id,
+               talent_id,
+               hire_time,
+               hire_money,
+               payment_state,
+               order_state,
+               create_time,
+               user_id,
+               manage_user_id,
+               talent_name
+        from rz_order
+        where user_id = #{userId}
+    </select>
+
+    <select id="getAllOrderList" resultType="com.wav.rzpp.entity.RzOrder">
+        select order_id,
+               employer_id,
+               talent_id,
+               hire_time,
+               hire_money,
+               payment_state,
+               order_state,
+               create_time,
+               user_id,
+               manage_user_id,
+               talent_name
+        from rz_order
+    </select>
+
+    <update id="updateOrderById">
+        update rz_order
+        set order_state = #{state}
+        where order_id = #{orderId}
+    </update>
+</mapper>

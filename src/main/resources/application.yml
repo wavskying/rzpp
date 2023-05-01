@@ -1,0 +1,70 @@
+server:
+  port: 8080
+  max-http-header-size: 102400
+
+spring:
+  aliyun:
+    oss:
+      endpoint: *************
+      access-key-id: ************
+      access-key-secret: *************
+      bucket-name: freemalloss
+      path-prefix: your-path-prefix #可选
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://*********/rzpp?serverTimezone=UTC&useUnicode=true&characterEncoding=utf-8
+    username: *********
+    password: *********
+    #    password: root
+    type: com.alibaba.druid.pool.DruidDataSource
+    logging:
+      level:
+        com.marvin.demo.dao: debug
+    druid:
+      initialSize: 5
+      minIdle: 5
+      maxActive: 200
+      maxWait: 60000
+      timeBetweenEvictionRunsMillis: 60000
+      minEvictableIdleTimeMillis: 300000
+      validationQuery: SELECT 1 FROM DUAL
+      # 建议配置为true，不影响性能，并且保证安全性。申请连接的时候检测，如果空闲时间大于timeBetweenEvictionRunsMillis，执行validationQuery检测连接是否有效。
+      testWhileIdle: true
+      testOnBorrow: false
+      testOnReturn: false
+  redis:
+    # redis数据库索引(默认为0)，我们使用索引为3的数据库，避免和其他数据库冲突
+    database: 0
+    # redis服务器地址（默认为loaclhost）
+    host: 47.100.117.207
+    # redis端口（默认为6379）
+    port: 6379
+    # redis访问密码（默认为空）
+    password:
+    # redis连接超时时间（单位毫秒）
+    timeout: 300
+    # redis连接池配置
+    jedis:
+      pool:
+        # 最大可用连接数（默认为8，负数表示无限）
+        max-active: -1
+        # 最大空闲连接数（默认为8，负数表示无限）
+        max-idle: -1
+        # 最小空闲连接数（默认为0，该值只有为正数才有用）
+        min-idle: 0
+        # 从连接池中获取连接最大等待时间（默认为-1，单位为毫秒，负数表示无限）
+        max-wait: -1
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.wav.rzpp.entity
+  configuration:
+    map-underscore-to-camel-case: true
+logging:
+  level:
+    com..wav.rzpp.mapper: debug
+
